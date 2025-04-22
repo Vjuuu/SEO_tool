@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SERP Preview Tool - Free SEO Tools</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#4A90E2', secondary: '#6B7280' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fafafa;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4A90E2;
+            box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .char-count {
+            transition: color 0.3s ease;
+        }
+
+        .char-count.warning {
+            color: #f59e0b;
+        }
+
+        .char-count.danger {
+            color: #ef4444;
+        }
+
+        .code-box {
+            font-family: 'Courier New', monospace;
+        }
+
+        .copy-button {
+            transition: all 0.2s ease;
+        }
+
+        .copy-button:hover {
+            background-color: rgba(74, 144, 226, 0.1);
+        }
+
+        .serp-preview {
+            font-family: Arial, sans-serif;
+        }
+
+        .serp-title {
+            color: #1a0dab;
+        }
+
+        .serp-url {
+            color: #006621;
+        }
+
+        .serp-description {
+            color: #545454;
+        }
+
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.toggle-slider {
+            background-color: #4A90E2;
+        }
+
+        input:checked+.toggle-slider:before {
+            transform: translateX(20px);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <h1 class="text-2xl font-['Pacifico'] text-primary mr-4">logo</h1>
+
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="bg-primary text-white px-4 py-2 !rounded-button whitespace-nowrap">Back</a>
+            </div>
+        </div>
+    </header>
+    <main class="container mx-auto px-4 py-8 max-w-4xl">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">SERP Preview Tool</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">Visualize your title, URL, and meta description as it appears in
+                Google search results. Test how your webpage will look on both desktop and mobile devices.</p>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <label for="pageTitle" class="block text-gray-700 font-medium">Page Title</label>
+                    <span id="pageTitleCount" class="text-sm text-gray-500 char-count">0/60 characters</span>
+                </div>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none w-10 h-10">
+                        <i class="ri-heading-line text-gray-400"></i>
+                    </div>
+                    <input type="text" id="pageTitle"
+                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:border-primary"
+                        placeholder="Enter your page title (e.g. Best SEO Tools for 2025)" maxlength="60">
+                </div>
+                <p class="mt-1 text-sm text-gray-500">Recommended length: 50-60 characters</p>
+            </div>
+            <div class="mb-6">
+                <div class="flex justify-between items-center mb-2">
+                    <label for="metaDescription" class="block text-gray-700 font-medium">Meta Description</label>
+                    <span id="metaDescriptionCount" class="text-sm text-gray-500 char-count">0/160 characters</span>
+                </div>
+                <div class="relative">
+                    <div class="absolute top-3 left-3 flex items-start pointer-events-none w-10 h-10">
+                        <i class="ri-file-text-line text-gray-400"></i>
+                    </div>
+                    <textarea id="metaDescription"
+                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:border-primary" rows="3"
+                        placeholder="Enter your meta description that summarizes your page content"
+                        maxlength="160"></textarea>
+                </div>
+                <p class="mt-1 text-sm text-gray-500">Recommended length: 120-160 characters</p>
+            </div>
+            <div class="mb-8">
+                <div class="flex justify-between items-center mb-2">
+                    <label for="keywords" class="block text-gray-700 font-medium">Keywords (Optional)</label>
+                    <span class="text-sm text-gray-500">Comma separated</span>
+                </div>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none w-10 h-10">
+                        <i class="ri-price-tag-3-line text-gray-400"></i>
+                    </div>
+                    <input type="text" id="keywords"
+                        class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:border-primary"
+                        placeholder="e.g. SEO, meta tags, search engine optimization">
+                </div>
+                <p class="mt-1 text-sm text-gray-500">While less important for SEO today, keywords can still help with
+                    content organization</p>
+            </div>
+            <button id="generateBtn"
+                class="w-full md:w-auto px-6 py-3 bg-primary text-white font-medium !rounded-button whitespace-nowrap hover:bg-primary/90 flex items-center justify-center mx-auto">
+                <i class="ri-magic-line mr-2"></i>
+                Generate Meta Tags
+            </button>
+        </div>
+        <div id="outputSection" class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-xl font-bold text-gray-800">Preview</h2>
+                <div class="flex items-center space-x-4">
+                    <button id="desktopViewBtn"
+                        class="flex items-center px-3 py-1.5 rounded bg-primary text-white !rounded-button">
+                        <i class="ri-computer-line mr-2"></i>Desktop
+                    </button>
+                    <button id="mobileViewBtn"
+                        class="flex items-center px-3 py-1.5 rounded border border-gray-300 text-gray-700 !rounded-button">
+                        <i class="ri-smartphone-line mr-2"></i>Mobile
+                    </button>
+                </div>
+            </div>
+            <div id="desktopPreview" class="border border-gray-200 rounded-lg p-6 mb-6">
+                <div class="max-w-2xl mx-auto">
+                    <div class="flex items-center mb-4">
+                        <img src="https://readdy.ai/api/search-image?query=simple%20google%20logo%20minimalist%20design&width=24&height=24&seq=1&orientation=squarish"
+                            alt="Google" class="w-6 h-6 mr-2">
+                        <div class="flex-1 h-10 bg-white border border-gray-300 rounded-full flex items-center px-4">
+                            <i class="ri-search-line text-gray-400 mr-2"></i>
+                            <div class="text-gray-700">Search results for your website</div>
+                        </div>
+                    </div>
+                    <div class="serp-preview bg-white rounded-lg p-4">
+                        <h3 id="serpTitle" class="text-xl serp-title mb-1 cursor-pointer hover:underline"></h3>
+                        <div id="serpUrl" class="text-sm serp-url mb-1 flex items-center">
+                            <i class="ri-global-line mr-1"></i>
+                            <span></span>
+                        </div>
+                        <div id="serpDescription" class="text-sm serp-description"></div>
+                    </div>
+                </div>
+            </div>
+            <div id="mobilePreview" class="hidden border border-gray-200 rounded-lg p-4">
+                <div class="max-w-sm mx-auto">
+                    <div class="flex items-center justify-center mb-4">
+                        <img src="https://readdy.ai/api/search-image?query=simple%20google%20logo%20minimalist%20design&width=24&height=24&seq=1&orientation=squarish"
+                            alt="Google" class="w-6 h-6">
+                    </div>
+                    <div class="serp-preview bg-white rounded-lg p-3">
+                        <h3 id="mobileSerpTitle" class="text-lg serp-title mb-1 cursor-pointer hover:underline"></h3>
+                        <div id="mobileSerpUrl" class="text-xs serp-url mb-1 flex items-center">
+                            <i class="ri-global-line mr-1"></i>
+                            <span></span>
+                        </div>
+                        <div id="mobileSerpDescription" class="text-sm serp-description"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">Frequently Asked Questions</h2>
+            <div class="mb-4 border-b border-gray-200 pb-4">
+                <button
+                    class="faq-toggle flex justify-between items-center w-full text-left font-medium text-gray-700 hover:text-primary">
+                    <span>What are meta tags and why are they important?</span>
+                    <i class="ri-arrow-down-s-line transition-transform"></i>
+                </button>
+                <div class="faq-content hidden mt-2 text-gray-600">
+                    <p class="mb-2">Meta tags are HTML elements that provide information about a webpage to search
+                        engines and website visitors. The two most important meta tags for SEO are:</p>
+                    <ul class="list-disc pl-5 mb-2">
+                        <li><strong>Title tag</strong>: Defines the title of your web page and is displayed as the
+                            clickable headline in search engine results.</li>
+                        <li><strong>Meta description</strong>: Provides a brief summary of the page content. While not a
+                            direct ranking factor, a well-written meta description can improve click-through rates.</li>
+                    </ul>
+                    <p>Well-optimized meta tags help search engines understand your content and can improve your
+                        visibility in search results.</p>
+                </div>
+            </div>
+            <div>
+                <button
+                    class="faq-toggle flex justify-between items-center w-full text-left font-medium text-gray-700 hover:text-primary">
+                    <span>How do I write effective meta tags?</span>
+                    <i class="ri-arrow-down-s-line transition-transform"></i>
+                </button>
+                <div class="faq-content hidden mt-2 text-gray-600">
+                    <p class="mb-2">For effective meta tags:</p>
+                    <ul class="list-disc pl-5">
+                        <li><strong>Title tags</strong>: Keep between 50-60 characters, include your primary keyword
+                            near the beginning, make it compelling and relevant to the page content.</li>
+                        <li><strong>Meta descriptions</strong>: Keep between 120-160 characters, include relevant
+                            keywords naturally, write a clear call-to-action, and accurately summarize the page content.
+                        </li>
+                        <li>Be unique - create different meta tags for each page on your website.</li>
+                        <li>Avoid keyword stuffing - write for humans first, search engines second.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-bold text-gray-800 mb-4">More SEO Tools</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <a href="#"
+                    class="flex items-center p-4 border border-gray-200 rounded hover:border-primary hover:shadow-sm transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center text-primary mr-3">
+                        <i class="ri-speed-line ri-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-800">Page Speed Analyzer</h3>
+                        <p class="text-sm text-gray-600">Test your website's loading performance</p>
+                    </div>
+                </a>
+                <a href="#"
+                    class="flex items-center p-4 border border-gray-200 rounded hover:border-primary hover:shadow-sm transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center text-primary mr-3">
+                        <i class="ri-links-line ri-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-800">Backlink Checker</h3>
+                        <p class="text-sm text-gray-600">Analyze your website's backlink profile</p>
+                    </div>
+                </a>
+                <a href="#"
+                    class="flex items-center p-4 border border-gray-200 rounded hover:border-primary hover:shadow-sm transition-all">
+                    <div class="w-10 h-10 flex items-center justify-center text-primary mr-3">
+                        <i class="ri-search-line ri-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-gray-800">Keyword Research</h3>
+                        <p class="text-sm text-gray-600">Find the best keywords for your content</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </main>
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Column 1 -->
+                <div>
+                    <a href="#" class="text-2xl font-['Pacifico'] text-white mb-4 inline-block">logo</a>
+                    <p class="text-gray-400 mb-4">Providing free SEO tools to help you optimize your website and improve your search engine rankings.</p>
+                    <!-- <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-facebook-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-twitter-x-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-linkedin-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-instagram-fill ri-lg"></i>
+                        </a>
+                    </div> -->
+                </div>
+                
+                <!-- Column 2 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="index.html/#section_tools" class="text-gray-400 hover:text-white transition-colors">Tools</a></li>
+                        <li><a href="index.html/#section_feature" class="text-gray-400 hover:text-white transition-colors">Feature</a></li>
+                        <li><a href="index.html/#section_faq" class="text-gray-400 hover:text-white transition-colors">FAQ's</a></li>
+                        <!-- <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li> -->
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Our Tools</h3>
+                    <ul class="space-y-2">
+                        <li><a href="meta_tag_generator.html" class="text-gray-400 hover:text-white transition-colors">Meta Tag Generator</a></li>
+                        <li><a href="scheme_generator.html" class="text-gray-400 hover:text-white transition-colors">Schema Generator</a></li>
+                        <li><a href="robot_txt_generator.html" class="text-gray-400 hover:text-white transition-colors">Robots.txt Generator</a></li>
+                        <!-- <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Sitemap Generator</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Redirect Checker</a></li> -->
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for SEO tips and updates.</p>
+                    <!-- <form class="flex flex-col space-y-2">
+                        <input type="email" placeholder="Your email address" class="bg-gray-800 text-white px-4 py-2 rounded border-none focus:ring-1 focus:ring-primary text-sm">
+                        <button type="submit" class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">Subscribe</button>
+                    </form> -->
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 SEO Tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const pageTitleInput = document.getElementById('pageTitle');
+            const metaDescriptionInput = document.getElementById('metaDescription');
+            const keywordsInput = document.getElementById('keywords');
+            const generateBtn = document.getElementById('generateBtn');
+            const outputSection = document.getElementById('outputSection');
+            const desktopViewBtn = document.getElementById('desktopViewBtn');
+            const mobileViewBtn = document.getElementById('mobileViewBtn');
+            const desktopPreview = document.getElementById('desktopPreview');
+            const mobilePreview = document.getElementById('mobilePreview');
+            const serpTitle = document.getElementById('serpTitle');
+            const serpUrl = document.getElementById('serpUrl').querySelector('span');
+            const serpDescription = document.getElementById('serpDescription');
+            const mobileSerpTitle = document.getElementById('mobileSerpTitle');
+            const mobileSerpUrl = document.getElementById('mobileSerpUrl').querySelector('span');
+            const mobileSerpDescription = document.getElementById('mobileSerpDescription');
+            const pageTitleCount = document.getElementById('pageTitleCount');
+            const metaDescriptionCount = document.getElementById('metaDescriptionCount');
+            // Character counter for title
+            pageTitleInput.addEventListener('input', function () {
+                const count = this.value.length;
+                pageTitleCount.textContent = `${count}/60 characters`;
+                if (count > 55) {
+                    pageTitleCount.classList.add('warning');
+                    if (count >= 60) {
+                        pageTitleCount.classList.remove('warning');
+                        pageTitleCount.classList.add('danger');
+                    }
+                } else {
+                    pageTitleCount.classList.remove('warning', 'danger');
+                }
+            });
+            // Character counter for description
+            metaDescriptionInput.addEventListener('input', function () {
+                const count = this.value.length;
+                metaDescriptionCount.textContent = `${count}/160 characters`;
+                if (count > 145) {
+                    metaDescriptionCount.classList.add('warning');
+                    if (count >= 160) {
+                        metaDescriptionCount.classList.remove('warning');
+                        metaDescriptionCount.classList.add('danger');
+                    }
+                } else {
+                    metaDescriptionCount.classList.remove('warning', 'danger');
+                }
+            });
+            
+            // Copy to clipboard
+            // copyBtn.addEventListener('click', function () {
+            //     const textToCopy = generatedCode.textContent;
+            //     navigator.clipboard.writeText(textToCopy).then(function () {
+            //         copyBtn.innerHTML = '<i class="ri-check-line mr-1"></i> Copied!';
+            //         setTimeout(function () {
+            //             copyBtn.innerHTML = '<i class="ri-file-copy-line mr-1"></i> Copy';
+            //         }, 2000);
+            //     }).catch(function (err) {
+            //         console.error('Could not copy text: ', err);
+            //     });
+            // });
+            // Toggle desktop/mobile view
+            desktopViewBtn.addEventListener('click', function () {
+                desktopViewBtn.classList.remove('border', 'border-gray-300', 'text-gray-700');
+                desktopViewBtn.classList.add('bg-primary', 'text-white');
+                mobileViewBtn.classList.add('border', 'border-gray-300', 'text-gray-700');
+                mobileViewBtn.classList.remove('bg-primary', 'text-white');
+                desktopPreview.classList.remove('hidden');
+                mobilePreview.classList.add('hidden');
+            });
+            mobileViewBtn.addEventListener('click', function () {
+                mobileViewBtn.classList.remove('border', 'border-gray-300', 'text-gray-700');
+                mobileViewBtn.classList.add('bg-primary', 'text-white');
+                desktopViewBtn.classList.add('border', 'border-gray-300', 'text-gray-700');
+                desktopViewBtn.classList.remove('bg-primary', 'text-white');
+                mobilePreview.classList.remove('hidden');
+                desktopPreview.classList.add('hidden');
+            });
+            // Update both desktop and mobile previews
+            function updatePreviews(title, url, description) {
+                serpTitle.textContent = title || 'Your Page Title';
+                serpUrl.textContent = url || 'https://yourwebsite.com/page';
+                serpDescription.textContent = description || 'Your page description will appear here. Make sure to write a compelling description to improve click-through rates.';
+                mobileSerpTitle.textContent = title || 'Your Page Title';
+                mobileSerpUrl.textContent = url || 'https://yourwebsite.com/page';
+                mobileSerpDescription.textContent = description || 'Your page description will appear here. Make sure to write a compelling description to improve click-through rates.';
+            }
+            // FAQ toggles
+            document.querySelectorAll('.faq-toggle').forEach(toggle => {
+                toggle.addEventListener('click', function () {
+                    const content = this.nextElementSibling;
+                    const icon = this.querySelector('i');
+                    if (content.classList.contains('hidden')) {
+                        content.classList.remove('hidden');
+                        icon.style.transform = 'rotate(180deg)';
+                    } else {
+                        content.classList.add('hidden');
+                        icon.style.transform = 'rotate(0)';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

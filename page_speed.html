@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Speed Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#1a73e8',secondary:'#0cce6b'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        
+        input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(26, 115, 232, 0.2);
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e2e8f0;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: #1a73e8;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+        
+        .circular-progress {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+        
+        .circular-progress svg {
+            transform: rotate(-90deg);
+        }
+        
+        .circular-progress circle {
+            fill: none;
+            stroke-width: 8;
+            stroke-linecap: round;
+        }
+        
+        .circular-progress .bg {
+            stroke: #f1f5f9;
+        }
+        
+        .circular-progress .progress {
+            stroke: #0cce6b;
+            transition: stroke-dashoffset 0.5s ease;
+        }
+        
+        .circular-progress .score {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 28px;
+            font-weight: 700;
+        }
+        
+        .loader {
+            width: 48px;
+            height: 48px;
+            border: 5px solid #f3f3f3;
+            border-bottom-color: #1a73e8;
+            border-radius: 50%;
+            display: inline-block;
+            box-sizing: border-box;
+            animation: rotation 1s linear infinite;
+        }
+        
+        @keyframes rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <h1 class="text-2xl font-['Pacifico'] text-primary mr-4">logo</h1>
+
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="bg-primary text-white px-4 py-2 !rounded-button whitespace-nowrap">Back</a>
+            </div>
+        </div>
+    </header>
+    <main class="container mx-auto px-4 py-8">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold text-center text-gray-800">Page Speed Analyzer</h1>
+            <p class="text-center text-gray-600 mt-2">Check how fast your website loads and get performance tips</p>
+        </div>
+        <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-sm p-6 mb-8">
+            <form id="analyzer-form" class="flex flex-col md:flex-row gap-4">
+                <div class="flex-grow relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <div class="w-5 h-5 flex items-center justify-center text-gray-400">
+                            <i class="ri-search-line"></i>
+                        </div>
+                    </div>
+                    <input 
+                        type="text" 
+                        id="url-input" 
+                        placeholder="Enter website URL (e.g., www.example.com)" 
+                        class="w-full pl-10 pr-4 py-3 border-none bg-gray-100 rounded text-gray-800 text-base"
+                        autofocus
+                    >
+                </div>
+                <button 
+                    type="submit" 
+                    class="bg-primary hover:bg-blue-600 text-white py-3 px-6 rounded-button whitespace-nowrap transition-colors font-medium"
+                >
+                    Analyze Speed
+                </button>
+            </form>
+            <p class="text-gray-500 text-sm mt-2 text-center md:text-left">Press Enter to analyze</p>
+        </div>
+
+        <div id="loading-state" class="max-w-3xl mx-auto bg-white rounded-lg shadow-sm p-12 mb-8 text-center hidden">
+            <span class="loader"></span>
+            <p class="mt-4 text-gray-700">Analyzing your website...</p>
+            <p class="text-gray-500 text-sm mt-2">This may take a few moments</p>
+        </div>
+
+        <div id="results-container" class="hidden">
+            <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-sm p-6 mb-8">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-gray-800">Performance Overview</h2>
+                    <div class="flex items-center gap-3">
+                        <span class="text-gray-600 text-sm">Mobile</span>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="device-toggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                        <span class="text-gray-600 text-sm">Desktop</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-gray-50 p-5 rounded-lg flex flex-col items-center">
+                        <div class="circular-progress mb-2">
+                            <svg width="120" height="120" viewBox="0 0 120 120">
+                                <circle class="bg" cx="60" cy="60" r="54" />
+                                <circle class="progress" cx="60" cy="60" r="54" stroke-dasharray="339.292" stroke-dashoffset="67.8584" />
+                            </svg>
+                            <div class="score text-green-600">80</div>
+                        </div>
+                        <h3 class="font-medium text-gray-700">Performance Score</h3>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-5 rounded-lg flex flex-col items-center justify-center">
+                        <div class="flex items-center justify-center mb-2">
+                            <div class="w-10 h-10 flex items-center justify-center text-primary">
+                                <i class="ri-time-line ri-2x"></i>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800">2.3<span class="text-lg">s</span></div>
+                        <h3 class="font-medium text-gray-700">Load Time</h3>
+                    </div>
+                    
+                    <div class="bg-gray-50 p-5 rounded-lg flex flex-col items-center justify-center">
+                        <div class="flex items-center justify-center mb-2">
+                            <div class="w-10 h-10 flex items-center justify-center text-primary">
+                                <i class="ri-file-list-line ri-2x"></i>
+                            </div>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800">1.8<span class="text-lg">MB</span></div>
+                        <h3 class="font-medium text-gray-700">Page Size</h3>
+                        <p class="text-sm text-gray-500 mt-1">78 Requests</p>
+                    </div>
+                </div>
+            </div>
+            <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-sm p-6 mb-8">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">Performance Insights</h2>
+                
+                <div class="grid grid-cols-1 gap-4">
+                    <div class="border border-yellow-200 bg-yellow-50 rounded-lg p-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 flex items-center justify-center text-yellow-500 mt-0.5">
+                                <i class="ri-error-warning-line"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Optimize Images</h3>
+                                <p class="text-gray-600 text-sm mt-1">Your images could be compressed by 1.2MB (64%) without losing quality.</p>
+                                <div class="flex items-center mt-2">
+                                    <span class="px-2 py-0.5 bg-yellow-200 text-yellow-700 text-xs rounded-full">Medium Impact</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border border-red-200 bg-red-50 rounded-lg p-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 flex items-center justify-center text-red-500 mt-0.5">
+                                <i class="ri-close-circle-line"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Eliminate Render-Blocking Resources</h3>
+                                <p class="text-gray-600 text-sm mt-1">Your page has 6 blocking scripts and 4 blocking CSS resources. This causes a delay in rendering your page.</p>
+                                <div class="flex items-center mt-2">
+                                    <span class="px-2 py-0.5 bg-red-200 text-red-700 text-xs rounded-full">High Impact</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border border-green-200 bg-green-50 rounded-lg p-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 flex items-center justify-center text-green-500 mt-0.5">
+                                <i class="ri-checkbox-circle-line"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Efficient Cache Policy</h3>
+                                <p class="text-gray-600 text-sm mt-1">Your static resources are properly cached. This helps returning visitors load your page faster.</p>
+                                <div class="flex items-center mt-2">
+                                    <span class="px-2 py-0.5 bg-green-200 text-green-700 text-xs rounded-full">Good</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="border border-yellow-200 bg-yellow-50 rounded-lg p-4">
+                        <div class="flex items-start gap-3">
+                            <div class="w-6 h-6 flex items-center justify-center text-yellow-500 mt-0.5">
+                                <i class="ri-error-warning-line"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-semibold text-gray-800">Reduce JavaScript Execution Time</h3>
+                                <p class="text-gray-600 text-sm mt-1">Your page spends 1.8 seconds executing JavaScript. Consider reducing JS payload or deferring non-critical scripts.</p>
+                                <div class="flex items-center mt-2">
+                                    <span class="px-2 py-0.5 bg-yellow-200 text-yellow-700 text-xs rounded-full">Medium Impact</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="max-w-3xl mx-auto bg-white rounded-lg shadow-sm p-6 mb-8">
+                <h2 class="text-xl font-bold text-gray-800 mb-6">Loading Performance</h2>
+                <div id="performance-chart" class="w-full h-80"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Column 1 -->
+                <div>
+                    <a href="#" class="text-2xl font-['Pacifico'] text-white mb-4 inline-block">logo</a>
+                    <p class="text-gray-400 mb-4">Providing free SEO tools to help you optimize your website and improve your search engine rankings.</p>
+                    <!-- <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-facebook-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-twitter-x-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-linkedin-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-instagram-fill ri-lg"></i>
+                        </a>
+                    </div> -->
+                </div>
+                
+                <!-- Column 2 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="index.html/#section_tools" class="text-gray-400 hover:text-white transition-colors">Tools</a></li>
+                        <li><a href="index.html/#section_feature" class="text-gray-400 hover:text-white transition-colors">Feature</a></li>
+                        <li><a href="index.html/#section_faq" class="text-gray-400 hover:text-white transition-colors">FAQ's</a></li>
+                        <!-- <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li> -->
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Our Tools</h3>
+                    <ul class="space-y-2">
+                        <li><a href="meta_tag_generator.html" class="text-gray-400 hover:text-white transition-colors">Meta Tag Generator</a></li>
+                        <li><a href="scheme_generator.html" class="text-gray-400 hover:text-white transition-colors">Schema Generator</a></li>
+                        <li><a href="robot_txt_generator.html" class="text-gray-400 hover:text-white transition-colors">Robots.txt Generator</a></li>
+                        <!-- <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Sitemap Generator</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Redirect Checker</a></li> -->
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for SEO tips and updates.</p>
+                    <!-- <form class="flex flex-col space-y-2">
+                        <input type="email" placeholder="Your email address" class="bg-gray-800 text-white px-4 py-2 rounded border-none focus:ring-1 focus:ring-primary text-sm">
+                        <button type="submit" class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">Subscribe</button>
+                    </form> -->
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 SEO Tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('analyzer-form');
+            const urlInput = document.getElementById('url-input');
+            const loadingState = document.getElementById('loading-state');
+            const resultsContainer = document.getElementById('results-container');
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const url = urlInput.value.trim();
+                if (!url) {
+                    alert('Please enter a valid URL');
+                    return;
+                }
+                
+                // Show loading state
+                loadingState.classList.remove('hidden');
+                resultsContainer.classList.add('hidden');
+                
+                // Simulate analysis (would be an actual API call in production)
+                setTimeout(() => {
+                    loadingState.classList.add('hidden');
+                    resultsContainer.classList.remove('hidden');
+                    
+                    // Initialize the performance chart
+                    initPerformanceChart();
+                    
+                    // Update circular progress based on score
+                    updateCircularProgress(80);
+                }, 2000);
+            });
+            
+            // Device toggle functionality
+            const deviceToggle = document.getElementById('device-toggle');
+            deviceToggle.addEventListener('change', function() {
+                // This would trigger a re-analysis for the selected device
+                // For demo purposes, we're just showing a message
+                const device = this.checked ? 'Desktop' : 'Mobile';
+                console.log(`Analyzing for ${device}`);
+            });
+        });
+        
+        function updateCircularProgress(score) {
+            const circle = document.querySelector('.circular-progress .progress');
+            const scoreElement = document.querySelector('.circular-progress .score');
+            const circumference = 2 * Math.PI * 54;
+            
+            // Update the score text
+            scoreElement.textContent = score;
+            
+            // Update the circle progress
+            const offset = circumference - (score / 100) * circumference;
+            circle.style.strokeDashoffset = offset;
+            
+            // Update color based on score
+            if (score >= 90) {
+                circle.style.stroke = '#0cce6b'; // Green
+                scoreElement.className = 'score text-green-600';
+            } else if (score >= 50) {
+                circle.style.stroke = '#ffa400'; // Yellow
+                scoreElement.className = 'score text-yellow-600';
+            } else {
+                circle.style.stroke = '#ff4e42'; // Red
+                scoreElement.className = 'score text-red-600';
+            }
+        }
+        
+        function initPerformanceChart() {
+            const chartDom = document.getElementById('performance-chart');
+            const myChart = echarts.init(chartDom);
+            
+            const option = {
+                animation: false,
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                    borderColor: '#e2e8f0',
+                    borderWidth: 1,
+                    textStyle: {
+                        color: '#1f2937'
+                    }
+                },
+                legend: {
+                    data: ['First Contentful Paint', 'Largest Contentful Paint', 'Time to Interactive'],
+                    bottom: 0
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '15%',
+                    top: '3%',
+                    containLabel: true
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Initial', 'After Optimization'],
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e2e8f0'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#1f2937'
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Time (seconds)',
+                    nameTextStyle: {
+                        color: '#1f2937'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#e2e8f0'
+                        }
+                    },
+                    axisLabel: {
+                        color: '#1f2937'
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#f1f5f9'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: 'First Contentful Paint',
+                        type: 'bar',
+                        data: [1.8, 0.9],
+                        itemStyle: {
+                            color: 'rgba(87, 181, 231, 1)',
+                            borderRadius: [4, 4, 0, 0]
+                        }
+                    },
+                    {
+                        name: 'Largest Contentful Paint',
+                        type: 'bar',
+                        data: [2.7, 1.5],
+                        itemStyle: {
+                            color: 'rgba(141, 211, 199, 1)',
+                            borderRadius: [4, 4, 0, 0]
+                        }
+                    },
+                    {
+                        name: 'Time to Interactive',
+                        type: 'bar',
+                        data: [3.5, 2.1],
+                        itemStyle: {
+                            color: 'rgba(251, 191, 114, 1)',
+                            borderRadius: [4, 4, 0, 0]
+                        }
+                    }
+                ]
+            };
+            
+            myChart.setOption(option);
+            
+            window.addEventListener('resize', function() {
+                myChart.resize();
+            });
+        }
+    </script>
+</body>
+</html>

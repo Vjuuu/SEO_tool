@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robots.txt Generator</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config = { theme: { extend: { colors: { primary: '#4F46E5', secondary: '#818CF8' }, borderRadius: { 'none': '0px', 'sm': '4px', DEFAULT: '8px', 'md': '12px', 'lg': '16px', 'xl': '20px', '2xl': '24px', '3xl': '32px', 'full': '9999px', 'button': '8px' } } } }</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Source+Code+Pro:wght@400;500&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :where([class^="ri-"])::before {
+            content: "\f3c2";
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+        }
+
+        .code-font {
+            font-family: 'Source Code Pro', monospace;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltip-text {
+            visibility: hidden;
+            width: 240px;
+            background-color: #ffffff;
+            color: #1f2937;
+            text-align: left;
+            border-radius: 8px;
+            padding: 12px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -120px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+
+        .tooltip:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            height: 1.25rem;
+            width: 1.25rem;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"]:checked {
+            background-color: #4F46E5;
+            border-color: #4F46E5;
+        }
+
+        input[type="checkbox"]:checked::after {
+            content: "";
+            width: 0.375rem;
+            height: 0.625rem;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+            position: relative;
+            top: -1px;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e5e7eb;
+            transition: .4s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #4F46E5;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(24px);
+        }
+
+        .line-numbers {
+            counter-reset: line;
+            padding-right: 8px;
+            border-right: 1px solid #374151;
+            color: #6b7280;
+            user-select: none;
+        }
+
+        .line-numbers span {
+            counter-increment: line;
+            display: block;
+            line-height: 1.5rem;
+        }
+
+        .line-numbers span:before {
+            content: counter(line);
+            display: block;
+            text-align: right;
+            padding-right: 8px;
+        }
+
+        textarea:focus,
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #4F46E5;
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
+        }
+
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <h1 class="text-2xl font-['Pacifico'] text-primary mr-4">logo</h1>
+
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="bg-primary text-white px-4 py-2 !rounded-button whitespace-nowrap">Back</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 md:py-12">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-8">
+                <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-3">Robots.txt Generator</h1>
+                <p class="text-gray-600 max-w-2xl mx-auto">Create a custom robots.txt file to control how search engines
+                    crawl your website.</p>
+            </div>
+            <div class="grid gap-8 md:grid-cols-1">
+                <!-- Configuration Section -->
+                <section class="bg-white rounded shadow-sm p-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Configuration</h2>
+
+                    <!-- User Agent Selection -->
+                    <div class="mb-6">
+                        <label for="user-agent" class="block text-sm font-medium text-gray-700 mb-1">User-Agent</label>
+                        <div class="relative">
+                            <select id="user-agent"
+                                class="w-full pl-3 pr-10 py-2 text-base border border-gray-300 rounded focus:outline-none focus:ring-primary focus:border-primary">
+                                <option value="*">* (All robots)</option>
+                                <option value="googlebot">Googlebot</option>
+                                <option value="bingbot">Bingbot</option>
+                                <option value="yandexbot">Yandexbot</option>
+                                <option value="baiduspider">Baiduspider</option>
+                            </select>
+                            <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                                <div class="w-5 h-5 flex items-center justify-center text-gray-400">
+                                    <i class="ri-arrow-down-s-line"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Global Settings -->
+                    <div class="mb-6 p-4 bg-gray-50 rounded">
+                        <h3 class="text-md font-medium text-gray-800 mb-3">Global Settings</h3>
+
+                        <div class="flex items-center justify-between mb-4">
+                            <div class="flex items-center">
+                                <span class="text-sm text-gray-700 mr-2">Block all crawlers</span>
+                                <div class="tooltip">
+                                    <div class="w-5 h-5 flex items-center justify-center text-gray-400">
+                                        <i class="ri-information-line"></i>
+                                    </div>
+                                    <span class="tooltip-text">Prevents all search engines from crawling your entire
+                                        site. Use with caution as this will remove your site from search results.</span>
+                                </div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="block-all">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <span class="text-sm text-gray-700 mr-2">Allow all crawlers</span>
+                                <div class="tooltip">
+                                    <div class="w-5 h-5 flex items-center justify-center text-gray-400">
+                                        <i class="ri-information-line"></i>
+                                    </div>
+                                    <span class="tooltip-text">Allows all search engines to crawl your entire site. This
+                                        is the default behavior if no robots.txt exists.</span>
+                                </div>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="allow-all" checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Sitemap URL -->
+                    <div class="mb-6">
+                        <div class="flex items-center mb-1">
+                            <label for="sitemap-url" class="block text-sm font-medium text-gray-700">Sitemap URL</label>
+                            <div class="tooltip ml-1">
+                                <div class="w-5 h-5 flex items-center justify-center text-gray-400">
+                                    <i class="ri-information-line"></i>
+                                </div>
+                                <span class="tooltip-text">Add your sitemap URL to help search engines discover all
+                                    pages on your site. Usually it's sitemap.xml in your root directory.</span>
+                            </div>
+                        </div>
+                        <input type="text" id="sitemap-url" placeholder="https://example.com/sitemap.xml"
+                            class="w-full px-3 py-2 border border-gray-300 rounded text-sm">
+                    </div>
+
+                    <!-- Specific Rules -->
+                    <div class="mb-6">
+                        <h3 class="text-md font-medium text-gray-800 mb-3">Specific Path Rules</h3>
+
+                        <div class="mb-4">
+                            <div class="flex space-x-2">
+                                <div class="flex-1">
+                                    <input type="text" id="path-input" placeholder="/admin/"
+                                        class="w-full px-3 py-2 border border-gray-300 rounded text-sm">
+                                </div>
+                                <select id="rule-type" class="px-3 py-2 border border-gray-300 rounded text-sm">
+                                    <option value="disallow">Disallow</option>
+                                    <option value="allow">Allow</option>
+                                </select>
+                                <button id="add-rule"
+                                    class="px-4 py-2 bg-primary text-white rounded-button whitespace-nowrap ">
+                                    Add Rule
+                                </button>
+                            </div>
+                        </div>
+
+                        <div id="rules-list" class="space-y-2 max-h-48 overflow-y-auto">
+                            <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <div class="flex items-center">
+                                    <span
+                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-2">
+                                        <i class="ri-close-line"></i>
+                                    </span>
+                                    <span class="text-sm code-font">/admin/</span>
+                                </div>
+                                <button class="text-gray-500 hover:text-gray-700 delete-rule">
+                                    <div class="w-5 h-5 flex items-center justify-center">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </div>
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <div class="flex items-center">
+                                    <span
+                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-2">
+                                        <i class="ri-close-line"></i>
+                                    </span>
+                                    <span class="text-sm code-font">/wp-admin/</span>
+                                </div>
+                                <button class="text-gray-500 hover:text-gray-700 delete-rule">
+                                    <div class="w-5 h-5 flex items-center justify-center">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </div>
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+                                <div class="flex items-center">
+                                    <span
+                                        class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-red-100 text-red-600 mr-2">
+                                        <i class="ri-close-line"></i>
+                                    </span>
+                                    <span class="text-sm code-font">/private/</span>
+                                </div>
+                                <button class="text-gray-500 hover:text-gray-700 delete-rule">
+                                    <div class="w-5 h-5 flex items-center justify-center">
+                                        <i class="ri-delete-bin-line"></i>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Advanced Custom Rules -->
+                    <div class="mb-4">
+                        <div class="flex items-center mb-1">
+                            <label for="custom-rules" class="block text-sm font-medium text-gray-700">Advanced Custom
+                                Rules (Optional)</label>
+                            <div class="tooltip ml-1">
+                                <div class="w-5 h-5 flex items-center justify-center text-gray-400">
+                                    <i class="ri-information-line"></i>
+                                </div>
+                                <span class="tooltip-text">Add any custom directives that aren't covered by the options
+                                    above. These will be added exactly as written.</span>
+                            </div>
+                        </div>
+                        <textarea id="custom-rules" rows="4"
+                            class="w-full px-3 py-2 border border-gray-300 rounded code-font text-sm"
+                            placeholder="# Example: Crawl-delay: 10"></textarea>
+                    </div>
+                </section>
+
+                <!-- Preview Section -->
+                <section class="bg-white rounded shadow-sm p-6">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-xl font-semibold text-gray-900">Generated Robots.txt</h2>
+                        <div class="flex space-x-2">
+                            <button id="copy-btn"
+                                class="inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-button bg-white text-gray-700 hover:bg-gray-50 whitespace-nowrap">
+                                <div class="w-4 h-4 flex items-center justify-center mr-1">
+                                    <i class="ri-file-copy-line"></i>
+                                </div>
+                                Copy
+                            </button>
+                            <button id="download-btn"
+                                class="inline-flex items-center px-3 py-2 border border-transparent shadow-sm text-sm font-medium rounded-button text-white bg-primary hover:bg-primary/90 whitespace-nowrap">
+                                <div class="w-4 h-4 flex items-center justify-center mr-1">
+                                    <i class="ri-download-line"></i>
+                                </div>
+                                Download
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-900 rounded overflow-hidden">
+                        <div class="flex">
+                            <div class="line-numbers p-4 code-font text-sm">
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                            <pre id="output" class="p-4 text-white overflow-x-auto code-font text-sm flex-1">User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://example.com/sitemap.xml
+
+# Disallow paths
+Disallow: /admin/
+Disallow: /wp-admin/
+Disallow: /private/</pre>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Help Section -->
+                <section class="bg-white rounded shadow-sm p-6">
+                    <h2 class="text-xl font-semibold text-gray-900 mb-4">Common Use Cases</h2>
+
+                    <div class="space-y-4">
+                        <div class="border border-gray-200 rounded overflow-hidden">
+                            <button class="w-full flex items-center justify-between p-4 text-left focus:outline-none"
+                                onclick="toggleAccordion('use-case-1')">
+                                <div class="flex items-center">
+                                    <div
+                                        class="w-8 h-8 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 mr-3">
+                                        <i class="ri-shield-line"></i>
+                                    </div>
+                                    <span class="font-medium">Block Admin & Private Areas</span>
+                                </div>
+                                <div class="w-5 h-5 flex items-center justify-center text-gray-500"
+                                    id="use-case-1-icon">
+                                    <i class="ri-arrow-down-s-line"></i>
+                                </div>
+                            </button>
+                            <div class="hidden px-4 pb-4" id="use-case-1-content">
+                                <p class="text-sm text-gray-600 mb-2">Prevent search engines from indexing sensitive
+                                    areas of your website:</p>
+                                <pre class="bg-gray-100 p-3 rounded text-sm code-font">User-agent: *
+Disallow: /admin/
+Disallow: /wp-admin/
+Disallow: /private/
+Disallow: /account/</pre>
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-200 rounded overflow-hidden">
+                            <button class="w-full flex items-center justify-between p-4 text-left focus:outline-none"
+                                onclick="toggleAccordion('use-case-2')">
+                                <div class="flex items-center">
+                                    <div
+                                        class="w-8 h-8 flex items-center justify-center rounded-full bg-green-100 text-green-600 mr-3">
+                                        <i class="ri-image-line"></i>
+                                    </div>
+                                    <span class="font-medium">Block Image Indexing</span>
+                                </div>
+                                <div class="w-5 h-5 flex items-center justify-center text-gray-500"
+                                    id="use-case-2-icon">
+                                    <i class="ri-arrow-down-s-line"></i>
+                                </div>
+                            </button>
+                            <div class="hidden px-4 pb-4" id="use-case-2-content">
+                                <p class="text-sm text-gray-600 mb-2">Prevent Google Images from indexing your images:
+                                </p>
+                                <pre class="bg-gray-100 p-3 rounded text-sm code-font">User-agent: Googlebot-Image
+Disallow: /
+User-agent: *
+Allow: /</pre>
+                            </div>
+                        </div>
+
+                        <div class="border border-gray-200 rounded overflow-hidden">
+                            <button class="w-full flex items-center justify-between p-4 text-left focus:outline-none"
+                                onclick="toggleAccordion('use-case-3')">
+                                <div class="flex items-center">
+                                    <div
+                                        class="w-8 h-8 flex items-center justify-center rounded-full bg-purple-100 text-purple-600 mr-3">
+                                        <i class="ri-time-line"></i>
+                                    </div>
+                                    <span class="font-medium">Control Crawl Rate</span>
+                                </div>
+                                <div class="w-5 h-5 flex items-center justify-center text-gray-500"
+                                    id="use-case-3-icon">
+                                    <i class="ri-arrow-down-s-line"></i>
+                                </div>
+                            </button>
+                            <div class="hidden px-4 pb-4" id="use-case-3-content">
+                                <p class="text-sm text-gray-600 mb-2">Slow down how quickly bots crawl your site
+                                    (helpful for server performance):</p>
+                                <pre class="bg-gray-100 p-3 rounded text-sm code-font">User-agent: *
+Crawl-delay: 10
+
+User-agent: Googlebot
+Crawl-delay: 5</pre>
+                                <p class="text-sm text-gray-500 mt-2">Note: Google doesn't respect Crawl-delay. Use
+                                    Google Search Console instead.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </main>
+
+     <!-- Footer -->
+     <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Column 1 -->
+                <div>
+                    <a href="#" class="text-2xl font-['Pacifico'] text-white mb-4 inline-block">logo</a>
+                    <p class="text-gray-400 mb-4">Providing free SEO tools to help you optimize your website and improve your search engine rankings.</p>
+                    <!-- <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-facebook-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-twitter-x-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-linkedin-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-instagram-fill ri-lg"></i>
+                        </a>
+                    </div> -->
+                </div>
+                
+                <!-- Column 2 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="index.html/#section_tools" class="text-gray-400 hover:text-white transition-colors">Tools</a></li>
+                        <li><a href="index.html/#section_feature" class="text-gray-400 hover:text-white transition-colors">Feature</a></li>
+                        <li><a href="index.html/#section_faq" class="text-gray-400 hover:text-white transition-colors">FAQ's</a></li>
+                        <!-- <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li> -->
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Our Tools</h3>
+                    <ul class="space-y-2">
+                        <li><a href="meta_tag_generator.html" class="text-gray-400 hover:text-white transition-colors">Meta Tag Generator</a></li>
+                        <li><a href="scheme_generator.html" class="text-gray-400 hover:text-white transition-colors">Schema Generator</a></li>
+                        <li><a href="robot_txt_generator.html" class="text-gray-400 hover:text-white transition-colors">Robots.txt Generator</a></li>
+                        <!-- <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Sitemap Generator</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Redirect Checker</a></li> -->
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for SEO tips and updates.</p>
+                    <!-- <form class="flex flex-col space-y-2">
+                        <input type="email" placeholder="Your email address" class="bg-gray-800 text-white px-4 py-2 rounded border-none focus:ring-1 focus:ring-primary text-sm">
+                        <button type="submit" class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">Subscribe</button>
+                    </form> -->
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 SEO Tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Toggle accordion functionality
+            window.toggleAccordion = function (id) {
+                const content = document.getElementById(`${id}-content`);
+                const icon = document.getElementById(`${id}-icon`);
+
+                if (content.classList.contains('hidden')) {
+                    content.classList.remove('hidden');
+                    icon.innerHTML = '<i class="ri-arrow-up-s-line"></i>';
+                } else {
+                    content.classList.add('hidden');
+                    icon.innerHTML = '<i class="ri-arrow-down-s-line"></i>';
+                }
+            };
+
+            // Copy to clipboard functionality
+            const copyBtn = document.getElementById('copy-btn');
+            copyBtn.addEventListener('click', function () {
+                const output = document.getElementById('output');
+                const textarea = document.createElement('textarea');
+                textarea.value = output.textContent;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+
+                // Show feedback
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<div class="w-4 h-4 flex items-center justify-center mr-1"><i class="ri-check-line"></i></div>Copied!';
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                }, 2000);
+            });
+
+            // Download functionality
+            const downloadBtn = document.getElementById('download-btn');
+            downloadBtn.addEventListener('click', function () {
+                const output = document.getElementById('output');
+                const blob = new Blob([output.textContent], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'robots.txt';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+
+            // Toggle global settings
+            const blockAllCheckbox = document.getElementById('block-all');
+            const allowAllCheckbox = document.getElementById('allow-all');
+
+            blockAllCheckbox.addEventListener('change', function () {
+                if (this.checked) {
+                    allowAllCheckbox.checked = false;
+                    updateOutput();
+                }
+            });
+
+            allowAllCheckbox.addEventListener('change', function () {
+                if (this.checked) {
+                    blockAllCheckbox.checked = false;
+                    updateOutput();
+                }
+            });
+
+            // Add rule functionality
+            const addRuleBtn = document.getElementById('add-rule');
+            const pathInput = document.getElementById('path-input');
+            const ruleType = document.getElementById('rule-type');
+            const rulesList = document.getElementById('rules-list');
+
+            addRuleBtn.addEventListener('click', function () {
+                const path = pathInput.value.trim();
+                if (!path) return;
+
+                const isDisallow = ruleType.value === 'disallow';
+                const iconClass = isDisallow ? 'ri-close-line' : 'ri-check-line';
+                const bgClass = isDisallow ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600';
+
+                const ruleElement = document.createElement('div');
+                ruleElement.className = 'flex items-center justify-between p-2 bg-gray-50 rounded';
+                ruleElement.innerHTML = `
+                    <div class="flex items-center">
+                        <span class="inline-flex items-center justify-center w-6 h-6 rounded-full ${bgClass} mr-2">
+                            <i class="${iconClass}"></i>
+                        </span>
+                        <span class="text-sm code-font">${path}</span>
+                    </div>
+                    <button class="text-gray-500 hover:text-gray-700 delete-rule">
+                        <div class="w-5 h-5 flex items-center justify-center">
+                            <i class="ri-delete-bin-line"></i>
+                        </div>
+                    </button>
+                `;
+
+                rulesList.appendChild(ruleElement);
+                pathInput.value = '';
+                updateOutput();
+
+                // Add delete functionality to the new rule
+                const deleteBtn = ruleElement.querySelector('.delete-rule');
+                deleteBtn.addEventListener('click', function () {
+                    ruleElement.remove();
+                    updateOutput();
+                });
+            });
+
+            // Add delete functionality to existing rules
+            document.querySelectorAll('.delete-rule').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    this.closest('div.flex').remove();
+                    updateOutput();
+                });
+            });
+
+            // Update output based on form values
+            function updateOutput() {
+                const userAgent = document.getElementById('user-agent').value;
+                const blockAll = document.getElementById('block-all').checked;
+                const allowAll = document.getElementById('allow-all').checked;
+                const sitemapUrl = document.getElementById('sitemap-url').value.trim();
+                const customRules = document.getElementById('custom-rules').value.trim();
+
+                let output = `User-agent: ${userAgent}\n`;
+
+                if (blockAll) {
+                    output += 'Disallow: /\n';
+                } else if (allowAll) {
+                    output += 'Allow: /\n';
+                }
+
+                // Add sitemap if provided
+                if (sitemapUrl) {
+                    output += '\n# Sitemap\n';
+                    output += `Sitemap: ${sitemapUrl}\n`;
+                }
+
+                // Add specific rules
+                const rules = [];
+                document.querySelectorAll('#rules-list > div').forEach(rule => {
+                    const path = rule.querySelector('.code-font').textContent;
+                    const isDisallow = rule.querySelector('i').classList.contains('ri-close-line');
+                    rules.push({ path, isDisallow });
+                });
+
+                if (rules.length > 0) {
+                    output += '\n# Disallow paths\n';
+                    rules.forEach(rule => {
+                        if (rule.isDisallow) {
+                            output += `Disallow: ${rule.path}\n`;
+                        } else {
+                            output += `Allow: ${rule.path}\n`;
+                        }
+                    });
+                }
+
+                // Add custom rules
+                if (customRules) {
+                    output += '\n# Custom rules\n';
+                    output += customRules + '\n';
+                }
+
+                document.getElementById('output').textContent = output.trim();
+
+                // Update line numbers
+                const lineCount = output.trim().split('\n').length;
+                const lineNumbers = document.querySelector('.line-numbers');
+                lineNumbers.innerHTML = '';
+
+                for (let i = 0; i < lineCount; i++) {
+                    const span = document.createElement('span');
+                    lineNumbers.appendChild(span);
+                }
+            }
+
+            // Initialize form elements
+            document.getElementById('user-agent').addEventListener('change', updateOutput);
+            document.getElementById('sitemap-url').addEventListener('input', updateOutput);
+            document.getElementById('custom-rules').addEventListener('input', updateOutput);
+
+            // Initialize with default values
+            updateOutput();
+        });
+    </script>
+</body>
+
+</html>

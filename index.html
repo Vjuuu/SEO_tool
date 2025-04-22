@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEO Tools - Boost Your Website Rankings</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#2563eb',secondary:'#10b981'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        body {
+            font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        .hero-bg {
+            background-image: url('https://readdy.ai/api/search-image?query=Modern%20SEO%20website%20background%20with%20abstract%20digital%20elements%2C%20gradient%20blue%20to%20white%2C%20clean%20design%20with%20subtle%20tech%20pattern%2C%20professional%20looking%2C%20space%20for%20text%20on%20left%20side%2C%20decorative%20SEO-related%20graphics%20on%20right%20side%2C%20high%20quality%2C%20minimalist&width=1600&height=800&seq=12345&orientation=landscape');
+            background-size: cover;
+            background-position: center;
+        }
+        input:focus {
+            outline: none;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-white text-gray-800">
+    <!-- Navigation -->
+    <header class="sticky top-0 z-50 w-full bg-white shadow-sm">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex h-16 items-center justify-between">
+                <div class="flex items-center">
+                    <a href="#" class="text-2xl font-['Pacifico'] text-primary">logo</a>
+                </div>
+                <nav class="hidden md:block">
+                    <ul class="flex space-x-8">
+                        <li><a href="#" class="text-primary font-medium">Home</a></li>
+                        <li><a href="#section_tools" class="text-gray-700 hover:text-primary transition-colors">Tools</a></li>
+                        <li><a href="#section_feature" class="text-gray-700 hover:text-primary transition-colors">Feature</a></li>
+                        <li><a href="#section_faq" class="text-gray-700 hover:text-primary transition-colors">FAQ</a></li>
+                    </ul>
+                </nav>
+                <div>
+                    <a href="#section_tools" class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">Get Started</a>
+                </div>
+                <div class="md:hidden w-10 h-10 flex items-center justify-center">
+                    <i class="ri-menu-line text-gray-700 ri-xl"></i>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-bg relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-white/90 via-white/80 to-transparent"></div>
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+            <div class="flex flex-col items-start justify-center min-h-[600px] py-16 max-w-2xl">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Free SEO Tools to Boost Your Website</h1>
+                <p class="text-lg text-gray-700 mb-8">Optimize your website's performance with our comprehensive suite of SEO tools. No sign-up required, completely free to use.</p>
+                
+                <div class="w-full max-w-md relative mb-8">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none w-10 h-10">
+                        <i class="ri-search-line text-gray-400 ri-lg"></i>
+                    </div>
+                    <input type="text" placeholder="Search for SEO tools..." class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded text-sm focus:border-primary focus:ring-1 focus:ring-primary">
+                </div>
+                
+                <div class="flex flex-wrap gap-4">
+                    <button class="bg-primary text-white px-6 py-3 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">Explore Tools</button>
+                    <button class="bg-white text-primary border border-primary px-6 py-3 !rounded-button font-medium hover:bg-gray-50 transition-colors whitespace-nowrap">Learn More</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section class="py-16 bg-gray-50" id="section_tools">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Powerful SEO Tools at Your Fingertips</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Everything you need to optimize your website and improve your search engine rankings, all in one place.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Tool 1 -->
+                <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col">
+                    <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-4">
+                        <i class="ri-file-text-line text-primary ri-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Meta Tag Generator</h3>
+                    <p class="text-gray-600 mb-4 flex-grow">Create optimized meta tags for your web pages to improve click-through rates from search results.</p>
+                    <a href="meta_tag_generator.html" class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors mt-2 whitespace-nowrap self-start">Use Now</a>
+                </div>
+                
+                <!-- Tool 2 -->
+                <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col">
+                    <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-4">
+                        <i class="ri-search-line text-primary ri-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Schema Generator</h3>
+                    <p class="text-gray-600 mb-4 flex-grow">Generate SEO-friendly JSON-LD markup for your website. Choose your schema type and get clean, copy-ready code instantly.</p>
+                    <a href="scheme_generator.html" class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors mt-2 whitespace-nowrap self-start">Use Now</a>
+                </div>
+                
+                <!-- Tool 3 -->
+                <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col">
+                    <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-4">
+                        <i class="ri-robot-line text-primary ri-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Robots.txt Generator</h3>
+                    <p class="text-gray-600 mb-4 flex-grow">Create a robots.txt file to control how search engines crawl and index your website.</p>
+                    <a href="robot_txt_generator.html" class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors mt-2 whitespace-nowrap self-start">Use Now</a>
+                </div>
+                
+                <!-- Tool 4 -->
+                <!-- <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col">
+                    <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-4">
+                        <i class="ri-file-list-3-line text-primary ri-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Sitemap Generator</h3>
+                    <p class="text-gray-600 mb-4 flex-grow">Generate XML sitemaps to help search engines discover and index all pages on your website.</p>
+                    <button class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors mt-2 whitespace-nowrap self-start">Use Now</button>
+                </div> -->
+                
+                <!-- Tool 5 -->
+                <!-- <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col">
+                    <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-4">
+                        <i class="ri-link-unlink-m text-primary ri-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Redirect Checker</h3>
+                    <p class="text-gray-600 mb-4 flex-grow">Verify that your URL redirects are working correctly and identify redirect chains.</p>
+                    <button class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors mt-2 whitespace-nowrap self-start">Use Now</button>
+                </div> -->
+                
+                <!-- Tool 6 -->
+                <!-- <div class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6 flex flex-col">
+                    <div class="w-16 h-16 flex items-center justify-center bg-primary/10 rounded-full mb-4">
+                        <i class="ri-speed-line text-primary ri-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Page Speed Analyzer</h3>
+                    <p class="text-gray-600 mb-4 flex-grow">Analyze your website's loading speed and get recommendations for improvement.</p>
+                    <a href="page_speed.html" class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors mt-2 whitespace-nowrap self-start">Use Now</a>
+                </div> -->
+            </div>
+            
+            <!-- <div class="text-center mt-12">
+                <button class="bg-white text-primary border border-primary px-6 py-3 !rounded-button font-medium hover:bg-gray-50 transition-colors whitespace-nowrap">View All Tools</button>
+            </div> -->
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-white" id="section_feature">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Why Choose Our SEO Tools</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Our tools are designed to help you optimize your website with ease and efficiency.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 flex items-center justify-center bg-secondary/10 rounded-full mx-auto mb-4">
+                        <i class="ri-time-line text-secondary ri-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Time-Saving</h3>
+                    <p class="text-gray-600">Get instant results without spending hours on manual analysis and optimization.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 flex items-center justify-center bg-secondary/10 rounded-full mx-auto mb-4">
+                        <i class="ri-lock-line text-secondary ri-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">No Sign-Up Required</h3>
+                    <p class="text-gray-600">Use all our tools instantly without creating an account or sharing your personal information.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="text-center p-6">
+                    <div class="w-16 h-16 flex items-center justify-center bg-secondary/10 rounded-full mx-auto mb-4">
+                        <i class="ri-money-dollar-circle-line text-secondary ri-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-2">Completely Free</h3>
+                    <p class="text-gray-600">All tools are free to use with no hidden fees or premium features locked behind paywalls.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="py-16 bg-gray-50" id="section_testinmonials">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">What Our Users Say</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Trusted by thousands of website owners and SEO professionals.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center bg-gray-200 rounded-full mr-4">
+                            <i class="ri-user-line text-gray-600 ri-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Michael Johnson</h4>
+                            <p class="text-sm text-gray-500">Digital Marketing Manager</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"These tools have become an essential part of my daily SEO workflow. The meta tag generator alone has saved me countless hours of work."</p>
+                    <div class="flex mt-4">
+                        <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                        <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                        <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                        <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                        <i class="ri-star-fill text-yellow-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center bg-gray-200 rounded-full mr-4">
+                            <i class="ri-user-line text-gray-600 ri-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">Rebecca Wilson</h4>
+                            <p class="text-sm text-gray-500">E-commerce Entrepreneur</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"As a small business owner, I appreciate having access to professional SEO tools without the hefty price tag. My site's ranking has improved significantly."</p>
+                    <div class="flex mt-4">
+                        <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                        <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                        <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                        <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                        <i class="ri-star-half-fill text-yellow-400"></i>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-white p-6 rounded-lg shadow-sm">
+                    <div class="flex items-center mb-4">
+                        <div class="w-12 h-12 flex items-center justify-center bg-gray-200 rounded-full mr-4">
+                            <i class="ri-user-line text-gray-600 ri-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-semibold">David Thompson</h4>
+                            <p class="text-sm text-gray-500">Freelance Web Developer</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-600">"I recommend these tools to all my clients. The sitemap generator and robots.txt tools are particularly useful for new website launches."</p>
+                    <div class="flex mt-4">
+                        <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                        <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                        <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                        <i class="ri-star-fill text-yellow-400 mr-1"></i>
+                        <i class="ri-star-fill text-yellow-400"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="py-16 bg-white" id="section_faq">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold mb-4">Frequently Asked Questions</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Find answers to common questions about our SEO tools.</p>
+            </div>
+            
+            <div class="max-w-3xl mx-auto">
+                <!-- FAQ Item 1 -->
+                <div class="border-b border-gray-200 py-4">
+                    <button class="flex justify-between items-center w-full text-left font-medium text-gray-900 focus:outline-none">
+                        <span>Are these tools really free to use?</span>
+                        <i class="ri-arrow-down-s-line ri-lg"></i>
+                    </button>
+                    <div class="mt-2">
+                        <p class="text-gray-600">Yes, all of our SEO tools are completely free to use. There are no hidden fees, premium features, or usage limits. We believe in providing value to the SEO community.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="border-b border-gray-200 py-4">
+                    <button class="flex justify-between items-center w-full text-left font-medium text-gray-900 focus:outline-none">
+                        <span>Do I need to create an account to use the tools?</span>
+                        <i class="ri-arrow-down-s-line ri-lg"></i>
+                    </button>
+                    <div class="mt-2">
+                        <p class="text-gray-600">No, you don't need to create an account or provide any personal information to use our tools. Simply visit the website and start using them right away.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="border-b border-gray-200 py-4">
+                    <button class="flex justify-between items-center w-full text-left font-medium text-gray-900 focus:outline-none">
+                        <span>How accurate are the SEO tools?</span>
+                        <i class="ri-arrow-down-s-line ri-lg"></i>
+                    </button>
+                    <div class="mt-2">
+                        <p class="text-gray-600">Our tools are designed to provide accurate and up-to-date information based on current SEO best practices. However, search engine algorithms change frequently, so we recommend using our tools as part of a comprehensive SEO strategy.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 4 -->
+                <div class="border-b border-gray-200 py-4">
+                    <button class="flex justify-between items-center w-full text-left font-medium text-gray-900 focus:outline-none">
+                        <span>Can I use these tools for my clients' websites?</span>
+                        <i class="ri-arrow-down-s-line ri-lg"></i>
+                    </button>
+                    <div class="mt-2">
+                        <p class="text-gray-600">Absolutely! Many SEO professionals and agencies use our tools for their clients' websites. There are no restrictions on commercial use.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 5 -->
+                <div class="border-b border-gray-200 py-4">
+                    <button class="flex justify-between items-center w-full text-left font-medium text-gray-900 focus:outline-none">
+                        <span>How often are the tools updated?</span>
+                        <i class="ri-arrow-down-s-line ri-lg"></i>
+                    </button>
+                    <div class="mt-2">
+                        <p class="text-gray-600">We regularly update our tools to ensure they align with the latest SEO trends and search engine algorithm changes. We also add new tools to our collection based on user feedback and industry needs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-primary/5" id="section_cta">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-4xl mx-auto text-center">
+                <h2 class="text-3xl font-bold mb-4">Ready to Improve Your Website's SEO?</h2>
+                <p class="text-gray-600 mb-8">Start using our free tools today and see the difference they can make for your website's search engine rankings.</p>
+                <button class="bg-primary text-white px-8 py-3 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">Get Started Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Column 1 -->
+                <div>
+                    <a href="#" class="text-2xl font-['Pacifico'] text-white mb-4 inline-block">logo</a>
+                    <p class="text-gray-400 mb-4">Providing free SEO tools to help you optimize your website and improve your search engine rankings.</p>
+                    <!-- <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-facebook-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-twitter-x-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-linkedin-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-instagram-fill ri-lg"></i>
+                        </a>
+                    </div> -->
+                </div>
+                
+                <!-- Column 2 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="index.html/#section_tools" class="text-gray-400 hover:text-white transition-colors">Tools</a></li>
+                        <li><a href="index.html/#section_feature" class="text-gray-400 hover:text-white transition-colors">Feature</a></li>
+                        <li><a href="index.html/#section_faq" class="text-gray-400 hover:text-white transition-colors">FAQ's</a></li>
+                        <!-- <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li> -->
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Our Tools</h3>
+                    <ul class="space-y-2">
+                        <li><a href="meta_tag_generator.html" class="text-gray-400 hover:text-white transition-colors">Meta Tag Generator</a></li>
+                        <li><a href="scheme_generator.html" class="text-gray-400 hover:text-white transition-colors">Schema Generator</a></li>
+                        <li><a href="robot_txt_generator.html" class="text-gray-400 hover:text-white transition-colors">Robots.txt Generator</a></li>
+                        <!-- <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Sitemap Generator</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Redirect Checker</a></li> -->
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for SEO tips and updates.</p>
+                    <!-- <form class="flex flex-col space-y-2">
+                        <input type="email" placeholder="Your email address" class="bg-gray-800 text-white px-4 py-2 rounded border-none focus:ring-1 focus:ring-primary text-sm">
+                        <button type="submit" class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">Subscribe</button>
+                    </form> -->
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 SEO Tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // FAQ Accordion
+            const faqButtons = document.querySelectorAll('.border-b button');
+            
+            faqButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const content = button.nextElementSibling;
+                    const icon = button.querySelector('i');
+                    
+                    if (content.style.display === 'none' || content.style.display === '') {
+                        content.style.display = 'block';
+                        icon.classList.remove('ri-arrow-down-s-line');
+                        icon.classList.add('ri-arrow-up-s-line');
+                    } else {
+                        content.style.display = 'none';
+                        icon.classList.remove('ri-arrow-up-s-line');
+                        icon.classList.add('ri-arrow-down-s-line');
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

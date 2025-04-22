@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Schema Generator</title>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#2563EB',secondary:'#64748B'},borderRadius:{'none':'0px','sm':'4px',DEFAULT:'8px','md':'12px','lg':'16px','xl':'20px','2xl':'24px','3xl':'32px','full':'9999px','button':'8px'}}}}</script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        :where([class^="ri-"])::before { content: "\f3c2"; }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .code-block {
+            font-family: 'Fira Code', monospace;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #2563EB;
+            box-shadow: 0 0 0 1px #2563EB;
+        }
+        input[type="number"]::-webkit-inner-spin-button,
+        input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .custom-switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .custom-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #e5e7eb;
+            transition: .2s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .2s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2563EB;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            background-color: #1F2937;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            z-index: 10;
+            width: 200px;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            margin-bottom: 8px;
+            font-size: 12px;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #1F2937 transparent transparent transparent;
+        }
+        .tooltip-container:hover .tooltip {
+            visibility: visible;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4 flex items-center justify-between">
+            <div class="flex items-center">
+                <h1 class="text-2xl font-['Pacifico'] text-primary mr-4">logo</h1>
+                
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="index.html" class="bg-primary text-white px-4 py-2 !rounded-button whitespace-nowrap">Back</a>
+            </div>
+        </div>
+    </header>
+    <div class="max-w-7xl mx-auto px-4 py-8">
+
+        <!-- Header Section -->
+       
+        <header class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-semibold text-gray-900 mb-3">Website Schema Generator</h1>
+            <p class="text-lg text-gray-600 max-w-3xl mx-auto">Generate SEO-friendly JSON-LD schema markup for your website to enhance your presence in search results.</p>
+        </header>
+
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <!-- Schema Type Selector -->
+            <div class="flex flex-wrap border-b border-gray-200 mb-8">
+                <button class="schema-tab active flex items-center px-6 py-3 font-medium text-primary border-b-2 border-primary" data-schema="website">
+                    <div class="w-6 h-6 flex items-center justify-center mr-2">
+                        <i class="ri-global-line"></i>
+                    </div>
+                    Website
+                </button>
+                <button class="schema-tab flex items-center px-6 py-3 font-medium text-gray-500 hover:text-gray-700" data-schema="organization">
+                    <div class="w-6 h-6 flex items-center justify-center mr-2">
+                        <i class="ri-building-line"></i>
+                    </div>
+                    Organization
+                </button>
+                <button class="schema-tab flex items-center px-6 py-3 font-medium text-gray-500 hover:text-gray-700" data-schema="localbusiness">
+                    <div class="w-6 h-6 flex items-center justify-center mr-2">
+                        <i class="ri-store-line"></i>
+                    </div>
+                    Local Business
+                </button>
+                <button class="schema-tab flex items-center px-6 py-3 font-medium text-gray-500 hover:text-gray-700" data-schema="article">
+                    <div class="w-6 h-6 flex items-center justify-center mr-2">
+                        <i class="ri-article-line"></i>
+                    </div>
+                    Article
+                </button>
+                <button class="schema-tab flex items-center px-6 py-3 font-medium text-gray-500 hover:text-gray-700" data-schema="product">
+                    <div class="w-6 h-6 flex items-center justify-center mr-2">
+                        <i class="ri-shopping-bag-line"></i>
+                    </div>
+                    Product
+                </button>
+            </div>
+
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-semibold text-gray-800" id="schema-title">Website Schema</h2>
+                <div class="flex items-center">
+                    <div class="flex items-center mr-4">
+                        <span class="mr-2 text-sm text-gray-600">Advanced Fields</span>
+                        <label class="custom-switch">
+                            <input type="checkbox" id="advanced-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <button class="flex items-center text-gray-600 hover:text-gray-900 px-3 py-1 border border-gray-300 rounded-button text-sm" id="reset-form">
+                        <div class="w-4 h-4 flex items-center justify-center mr-1">
+                            <i class="ri-refresh-line"></i>
+                        </div>
+                        Reset
+                    </button>
+                    <button class="flex items-center text-white bg-primary hover:bg-blue-700 px-3 py-1 rounded-button ml-2 text-sm whitespace-nowrap" id="save-template">
+                        <div class="w-4 h-4 flex items-center justify-center mr-1">
+                            <i class="ri-save-line"></i>
+                        </div>
+                        Save Template
+                    </button>
+                </div>
+            </div>
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Dynamic Form Section -->
+                <div class="w-full lg:w-1/2">
+                    <!-- Website Schema Form -->
+                    <div class="schema-form" id="website-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Website Name*</label>
+                                <div class="relative">
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="website-name" placeholder="Your Website Name">
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Website URL*</label>
+                                <div class="relative">
+                                    <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="website-url" placeholder="https://example.com">
+                                </div>
+                            </div>
+                            <div class="col-span-2 advanced-field hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1 flex items-center">
+                                    Search Action
+                                    <div class="tooltip-container relative ml-1">
+                                        <div class="w-4 h-4 flex items-center justify-center text-gray-400">
+                                            <i class="ri-information-line"></i>
+                                        </div>
+                                        <div class="tooltip">
+                                            Add search functionality information to help search engines understand how your site search works.
+                                        </div>
+                                    </div>
+                                </label>
+                                <div class="relative">
+                                    <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="website-search" placeholder="https://example.com/search?q={search_term_string}">
+                                </div>
+                            </div>
+                            <div class="col-span-2 advanced-field hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                <div class="relative">
+                                    <textarea class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="website-description" rows="3" placeholder="Brief description of your website"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Organization Schema Form -->
+                    <div class="schema-form hidden" id="organization-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Organization Name*</label>
+                                <div class="relative">
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="org-name" placeholder="Your Organization Name">
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Organization URL*</label>
+                                <div class="relative">
+                                    <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="org-url" placeholder="https://example.com">
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Logo URL*</label>
+                                <div class="relative">
+                                    <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="org-logo" placeholder="https://example.com/logo.png">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                                <div class="relative">
+                                    <input type="tel" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="org-phone" placeholder="+1 (555) 123-4567">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                                <div class="relative">
+                                    <input type="email" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="org-email" placeholder="contact@example.com">
+                                </div>
+                            </div>
+                            <div class="col-span-2 advanced-field hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                                <div class="relative">
+                                    <textarea class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="org-description" rows="3" placeholder="Brief description of your organization"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-span-2 advanced-field hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Social Profiles</label>
+                                <div class="grid grid-cols-1 gap-3">
+                                    <div class="flex items-center">
+                                        <div class="w-6 h-6 flex items-center justify-center mr-2 text-blue-600">
+                                            <i class="ri-facebook-fill"></i>
+                                        </div>
+                                        <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" placeholder="https://facebook.com/yourpage">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-6 h-6 flex items-center justify-center mr-2 text-blue-400">
+                                            <i class="ri-twitter-fill"></i>
+                                        </div>
+                                        <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" placeholder="https://twitter.com/yourhandle">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <div class="w-6 h-6 flex items-center justify-center mr-2 text-blue-700">
+                                            <i class="ri-linkedin-fill"></i>
+                                        </div>
+                                        <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" placeholder="https://linkedin.com/company/yourcompany">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Local Business Schema Form -->
+                    <div class="schema-form hidden" id="localbusiness-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Business Name*</label>
+                                <div class="relative">
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="business-name" placeholder="Your Business Name">
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Business Type*</label>
+                                <div class="relative">
+                                    <select class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary pr-8" id="business-type">
+                                        <option value="LocalBusiness">Local Business</option>
+                                        <option value="Restaurant">Restaurant</option>
+                                        <option value="Hotel">Hotel</option>
+                                        <option value="Store">Store</option>
+                                        <option value="ProfessionalService">Professional Service</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Business URL*</label>
+                                <div class="relative">
+                                    <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="business-url" placeholder="https://example.com">
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Phone*</label>
+                                <div class="relative">
+                                    <input type="tel" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="business-phone" placeholder="+1 (555) 123-4567">
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Address*</label>
+                                <div class="grid grid-cols-1 gap-3">
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="business-street" placeholder="Street Address">
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="business-city" placeholder="City">
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="business-state" placeholder="State/Province">
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-3">
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="business-zip" placeholder="Postal/Zip Code">
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="business-country" placeholder="Country">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-span-2 advanced-field hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Opening Hours</label>
+                                <div class="grid grid-cols-1 gap-3">
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm">Monday</span>
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" placeholder="9:00-17:00">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm">Tuesday</span>
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" placeholder="9:00-17:00">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm">Wednesday</span>
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" placeholder="9:00-17:00">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm">Thursday</span>
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" placeholder="9:00-17:00">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm">Friday</span>
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" placeholder="9:00-17:00">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm">Saturday</span>
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" placeholder="10:00-15:00">
+                                    </div>
+                                    <div class="flex items-center">
+                                        <span class="w-24 text-sm">Sunday</span>
+                                        <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" placeholder="Closed">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Article Schema Form -->
+                    <div class="schema-form hidden" id="article-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Article Type*</label>
+                                <div class="relative">
+                                    <select class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary pr-8" id="article-type">
+                                        <option value="Article">Article</option>
+                                        <option value="BlogPosting">Blog Post</option>
+                                        <option value="NewsArticle">News Article</option>
+                                        <option value="TechArticle">Technical Article</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Headline*</label>
+                                <div class="relative">
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="article-headline" placeholder="Article Headline">
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Article URL*</label>
+                                <div class="relative">
+                                    <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="article-url" placeholder="https://example.com/article">
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Image URL*</label>
+                                <div class="relative">
+                                    <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="article-image" placeholder="https://example.com/article-image.jpg">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Date Published*</label>
+                                <div class="relative">
+                                    <input type="date" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="article-date">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Author Name*</label>
+                                <div class="relative">
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="article-author" placeholder="Author Name">
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Description*</label>
+                                <div class="relative">
+                                    <textarea class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="article-description" rows="3" placeholder="Brief description of the article"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-span-2 advanced-field hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Publisher Name</label>
+                                <div class="relative">
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="article-publisher" placeholder="Publisher Name">
+                                </div>
+                            </div>
+                            <div class="col-span-2 advanced-field hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Publisher Logo URL</label>
+                                <div class="relative">
+                                    <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="publisher-logo" placeholder="https://example.com/publisher-logo.png">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Product Schema Form -->
+                    <div class="schema-form hidden" id="product-form">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Product Name*</label>
+                                <div class="relative">
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="product-name" placeholder="Product Name">
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Product URL*</label>
+                                <div class="relative">
+                                    <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="product-url" placeholder="https://example.com/product">
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Image URL*</label>
+                                <div class="relative">
+                                    <input type="url" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="product-image" placeholder="https://example.com/product-image.jpg">
+                                </div>
+                            </div>
+                            <div class="col-span-2">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Description*</label>
+                                <div class="relative">
+                                    <textarea class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="product-description" rows="3" placeholder="Product description"></textarea>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Price*</label>
+                                <div class="relative">
+                                    <input type="number" step="0.01" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="product-price" placeholder="29.99">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Currency*</label>
+                                <div class="relative">
+                                    <select class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary pr-8" id="product-currency">
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="GBP">GBP</option>
+                                        <option value="CAD">CAD</option>
+                                        <option value="AUD">AUD</option>
+                                        <option value="JPY">JPY</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-span-2 advanced-field hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Availability</label>
+                                <div class="relative">
+                                    <select class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary pr-8" id="product-availability">
+                                        <option value="InStock">In Stock</option>
+                                        <option value="OutOfStock">Out of Stock</option>
+                                        <option value="PreOrder">Pre-Order</option>
+                                        <option value="BackOrder">Back Order</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-span-2 advanced-field hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Brand</label>
+                                <div class="relative">
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="product-brand" placeholder="Brand Name">
+                                </div>
+                            </div>
+                            <div class="col-span-2 advanced-field hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">SKU</label>
+                                <div class="relative">
+                                    <input type="text" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="product-sku" placeholder="SKU123456">
+                                </div>
+                            </div>
+                            <div class="col-span-2 advanced-field hidden">
+                                <label class="block text-sm font-medium text-gray-700 mb-1">Rating</label>
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-xs text-gray-500 mb-1">Value (1-5)</label>
+                                        <input type="number" min="1" max="5" step="0.1" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="product-rating-value" placeholder="4.5">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs text-gray-500 mb-1">Count</label>
+                                        <input type="number" min="0" class="w-full px-4 py-2 border border-gray-300 rounded focus:ring-primary focus:border-primary" id="product-rating-count" placeholder="87">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8">
+                        <button class="w-full bg-primary hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-button flex items-center justify-center" id="generate-schema">
+                            <div class="w-5 h-5 flex items-center justify-center mr-2">
+                                <i class="ri-code-line"></i>
+                            </div>
+                            Generate Schema
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Schema Preview -->
+                <div class="w-full lg:w-1/2">
+                    <div class="bg-gray-100 rounded-lg p-4 h-full">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-lg font-medium text-gray-800">JSON-LD Preview</h3>
+                            <div class="flex space-x-2">
+                                <button class="flex items-center text-gray-600 hover:text-gray-900 px-3 py-1 border border-gray-300 bg-white rounded-button text-sm whitespace-nowrap" id="copy-code">
+                                    <div class="w-4 h-4 flex items-center justify-center mr-1">
+                                        <i class="ri-clipboard-line"></i>
+                                    </div>
+                                    Copy
+                                </button>
+                                <button class="flex items-center text-gray-600 hover:text-gray-900 px-3 py-1 border border-gray-300 bg-white rounded-button text-sm whitespace-nowrap" id="download-json">
+                                    <div class="w-4 h-4 flex items-center justify-center mr-1">
+                                        <i class="ri-download-line"></i>
+                                    </div>
+                                    Download
+                                </button>
+                                <a href="https://search.google.com/test/rich-results" target="_blank" class="flex items-center text-gray-600 hover:text-gray-900 px-3 py-1 border border-gray-300 bg-white rounded-button text-sm whitespace-nowrap">
+                                    <div class="w-4 h-4 flex items-center justify-center mr-1">
+                                        <i class="ri-external-link-line"></i>
+                                    </div>
+                                    Validate
+                                </a>
+                            </div>
+                        </div>
+                        <div class="bg-gray-900 rounded-lg p-4 overflow-auto h-[500px]" id="code-preview">
+                            <pre class="code-block text-sm text-gray-300 whitespace-pre"><code id="json-output">{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Your Website Name",
+  "url": "https://example.com",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://example.com/search?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}</code></pre>
+                        </div>
+                        <div class="mt-4 text-sm text-gray-600">
+                            <p>Implementation: Add this code to the <code class="bg-gray-200 px-1 py-0.5 rounded">&lt;head&gt;</code> section of your HTML.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success notification -->
+        <div class="fixed bottom-4 right-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded shadow-md hidden" id="success-notification">
+            <div class="flex items-center">
+                <div class="w-5 h-5 flex items-center justify-center mr-2 text-green-500">
+                    <i class="ri-check-line"></i>
+                </div>
+                <p>Copied to clipboard successfully!</p>
+            </div>
+        </div>
+    </div>
+
+     <!-- Footer -->
+     <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <!-- Column 1 -->
+                <div>
+                    <a href="#" class="text-2xl font-['Pacifico'] text-white mb-4 inline-block">logo</a>
+                    <p class="text-gray-400 mb-4">Providing free SEO tools to help you optimize your website and improve your search engine rankings.</p>
+                    <!-- <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-facebook-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-twitter-x-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-linkedin-fill ri-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors w-8 h-8 flex items-center justify-center">
+                            <i class="ri-instagram-fill ri-lg"></i>
+                        </a>
+                    </div> -->
+                </div>
+                
+                <!-- Column 2 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="index" class="text-gray-400 hover:text-white transition-colors">Home</a></li>
+                        <li><a href="index.html/#section_tools" class="text-gray-400 hover:text-white transition-colors">Tools</a></li>
+                        <li><a href="index.html/#section_feature" class="text-gray-400 hover:text-white transition-colors">Feature</a></li>
+                        <li><a href="index.html/#section_faq" class="text-gray-400 hover:text-white transition-colors">FAQ's</a></li>
+                        <!-- <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Terms of Service</a></li> -->
+                    </ul>
+                </div>
+                
+                <!-- Column 3 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Our Tools</h3>
+                    <ul class="space-y-2">
+                        <li><a href="meta_tag_generator.html" class="text-gray-400 hover:text-white transition-colors">Meta Tag Generator</a></li>
+                        <li><a href="scheme_generator.html" class="text-gray-400 hover:text-white transition-colors">Schema Generator</a></li>
+                        <li><a href="robot_txt_generator.html" class="text-gray-400 hover:text-white transition-colors">Robots.txt Generator</a></li>
+                        <!-- <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Sitemap Generator</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Redirect Checker</a></li> -->
+                    </ul>
+                </div>
+                
+                <!-- Column 4 -->
+                <div>
+                    <h3 class="text-lg font-semibold mb-4">Newsletter</h3>
+                    <p class="text-gray-400 mb-4">Subscribe to our newsletter for SEO tips and updates.</p>
+                    <!-- <form class="flex flex-col space-y-2">
+                        <input type="email" placeholder="Your email address" class="bg-gray-800 text-white px-4 py-2 rounded border-none focus:ring-1 focus:ring-primary text-sm">
+                        <button type="submit" class="bg-primary text-white px-4 py-2 !rounded-button font-medium hover:bg-primary/90 transition-colors whitespace-nowrap">Subscribe</button>
+                    </form> -->
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center">
+                <p class="text-gray-400">&copy; 2025 SEO Tools. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            const schemaTabs = document.querySelectorAll('.schema-tab');
+            const schemaForms = document.querySelectorAll('.schema-form');
+            const schemaTitle = document.getElementById('schema-title');
+
+            schemaTabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Remove active class from all tabs
+                    schemaTabs.forEach(t => t.classList.remove('active', 'text-primary', 'border-b-2', 'border-primary'));
+                    schemaTabs.forEach(t => t.classList.add('text-gray-500'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active', 'text-primary', 'border-b-2', 'border-primary');
+                    this.classList.remove('text-gray-500');
+                    
+                    // Hide all forms
+                    schemaForms.forEach(form => form.classList.add('hidden'));
+                    
+                    // Show selected form
+                    const schemaType = this.getAttribute('data-schema');
+                    document.getElementById(`${schemaType}-form`).classList.remove('hidden');
+                    
+                    // Update title
+                    let titleText = schemaType.charAt(0).toUpperCase() + schemaType.slice(1);
+                    if (titleText === 'Localbusiness') titleText = 'Local Business';
+                    schemaTitle.textContent = `${titleText} Schema`;
+                });
+            });
+
+            // Advanced fields toggle
+            const advancedToggle = document.getElementById('advanced-toggle');
+            const advancedFields = document.querySelectorAll('.advanced-field');
+            
+            advancedToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    advancedFields.forEach(field => field.classList.remove('hidden'));
+                } else {
+                    advancedFields.forEach(field => field.classList.add('hidden'));
+                }
+            });
+            // Reset form
+            const resetFormButton = document.getElementById('reset-form');
+            resetFormButton.addEventListener('click', function() {
+                const activeForm = document.querySelector('.schema-form:not(.hidden)');
+                const inputs = activeForm.querySelectorAll('input, textarea, select');
+                inputs.forEach(input => {
+                    input.value = '';
+                });
+            });
+
+            // Generate schema
+            const generateButton = document.getElementById('generate-schema');
+            const jsonOutput = document.getElementById('json-output');
+            
+            generateButton.addEventListener('click', function() {
+                const activeTab = document.querySelector('.schema-tab.active');
+                const schemaType = activeTab.getAttribute('data-schema');
+                
+                let schema = {
+                    "@context": "https://schema.org"
+                };
+                
+                switch(schemaType) {
+                    case 'website':
+                        schema["@type"] = "WebSite";
+                        schema.name = document.getElementById('website-name').value || "Your Website Name";
+                        schema.url = document.getElementById('website-url').value || "https://example.com";
+                        
+                        const searchUrl = document.getElementById('website-search').value;
+                        if (searchUrl) {
+                            schema.potentialAction = {
+                                "@type": "SearchAction",
+                                "target": searchUrl,
+                                "query-input": "required name=search_term_string"
+                            };
+                        }
+                        
+                        const websiteDesc = document.getElementById('website-description').value;
+                        if (websiteDesc) {
+                            schema.description = websiteDesc;
+                        }
+                        break;
+                        
+                    case 'organization':
+                        schema["@type"] = "Organization";
+                        schema.name = document.getElementById('org-name').value || "Your Organization Name";
+                        schema.url = document.getElementById('org-url').value || "https://example.com";
+                        schema.logo = document.getElementById('org-logo').value || "https://example.com/logo.png";
+                        
+                        const orgPhone = document.getElementById('org-phone').value;
+                        if (orgPhone) {
+                            schema.telephone = orgPhone;
+                        }
+                        
+                        const orgEmail = document.getElementById('org-email').value;
+                        if (orgEmail) {
+                            schema.email = orgEmail;
+                        }
+                        
+                        const orgDesc = document.getElementById('org-description')?.value;
+                        if (orgDesc) {
+                            schema.description = orgDesc;
+                        }
+                        break;
+                        
+                    case 'localbusiness':
+                        schema["@type"] = document.getElementById('business-type').value;
+                        schema.name = document.getElementById('business-name').value || "Your Business Name";
+                        schema.url = document.getElementById('business-url').value || "https://example.com";
+                        schema.telephone = document.getElementById('business-phone').value || "+1 (555) 123-4567";
+                        
+                        schema.address = {
+                            "@type": "PostalAddress",
+                            "streetAddress": document.getElementById('business-street').value || "123 Main St",
+                            "addressLocality": document.getElementById('business-city').value || "City",
+                            "addressRegion": document.getElementById('business-state').value || "State",
+                            "postalCode": document.getElementById('business-zip').value || "12345",
+                            "addressCountry": document.getElementById('business-country').value || "Country"
+                        };
+                        break;
+                        
+                    case 'article':
+                        schema["@type"] = document.getElementById('article-type').value;
+                        schema.headline = document.getElementById('article-headline').value || "Article Headline";
+                        schema.mainEntityOfPage = {
+                            "@type": "WebPage",
+                            "@id": document.getElementById('article-url').value || "https://example.com/article"
+                        };
+                        schema.image = document.getElementById('article-image').value || "https://example.com/article-image.jpg";
+                        schema.datePublished = document.getElementById('article-date').value || "2025-04-22";
+                        schema.author = {
+                            "@type": "Person",
+                            "name": document.getElementById('article-author').value || "Author Name"
+                        };
+                        schema.description = document.getElementById('article-description').value || "Article description";
+                        
+                        const publisherName = document.getElementById('article-publisher')?.value;
+                        const publisherLogo = document.getElementById('publisher-logo')?.value;
+                        
+                        if (publisherName || publisherLogo) {
+                            schema.publisher = {
+                                "@type": "Organization",
+                                "name": publisherName || "Publisher Name",
+                                "logo": {
+                                    "@type": "ImageObject",
+                                    "url": publisherLogo || "https://example.com/publisher-logo.png"
+                                }
+                            };
+                        }
+                        break;
+                        
+                    case 'product':
+                        schema["@type"] = "Product";
+                        schema.name = document.getElementById('product-name').value || "Product Name";
+                        schema.description = document.getElementById('product-description').value || "Product description";
+                        schema.image = document.getElementById('product-image').value || "https://example.com/product-image.jpg";
+                        
+                        const price = document.getElementById('product-price').value || "29.99";
+                        const currency = document.getElementById('product-currency').value;
+                        
+                        schema.offers = {
+                            "@type": "Offer",
+                            "price": price,
+                            "priceCurrency": currency,
+                            "url": document.getElementById('product-url').value || "https://example.com/product"
+                        };
+                        
+                        const availability = document.getElementById('product-availability')?.value;
+                        if (availability) {
+                            schema.offers.availability = "https://schema.org/" + availability;
+                        }
+                        
+                        const brand = document.getElementById('product-brand')?.value;
+                        if (brand) {
+                            schema.brand = {
+                                "@type": "Brand",
+                                "name": brand
+                            };
+                        }
+                        
+                        const sku = document.getElementById('product-sku')?.value;
+                        if (sku) {
+                            schema.sku = sku;
+                        }
+                        
+                        const ratingValue = document.getElementById('product-rating-value')?.value;
+                        const ratingCount = document.getElementById('product-rating-count')?.value;
+                        
+                        if (ratingValue) {
+                            schema.aggregateRating = {
+                                "@type": "AggregateRating",
+                                "ratingValue": ratingValue,
+                                "reviewCount": ratingCount || "1"
+                            };
+                        }
+                        break;
+                }
+                
+                jsonOutput.textContent = JSON.stringify(schema, null, 2);
+            });
+
+            // Copy to clipboard
+            const copyButton = document.getElementById('copy-code');
+            const successNotification = document.getElementById('success-notification');
+            
+            copyButton.addEventListener('click', function() {
+                const codeText = jsonOutput.textContent;
+                navigator.clipboard.writeText(codeText).then(function() {
+                    successNotification.classList.remove('hidden');
+                    setTimeout(function() {
+                        successNotification.classList.add('hidden');
+                    }, 3000);
+                });
+            });
+
+            // Download JSON
+            const downloadButton = document.getElementById('download-json');
+            
+            downloadButton.addEventListener('click', function() {
+                const schemaText = jsonOutput.textContent;
+                const blob = new Blob([schemaText], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'schema.json';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+
+            // Save template functionality
+            const saveTemplateButton = document.getElementById('save-template');
+            
+            saveTemplateButton.addEventListener('click', function() {
+                alert('To save templates, please sign in or create an account.');
+            });
+        });
+    </script>
+</body>
+</html>
